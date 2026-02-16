@@ -1,198 +1,81 @@
 project:
-
-&nbsp; title: "MSc Group Project – LLM-Based Legal Clause Classification"
-
-&nbsp; author: "Fawwaz Ahmed"
-
-&nbsp; university: "University of Liverpool"
-
-&nbsp; degree: "MSc Computer Science"
-
-
+title: "MSc Group Project – LLM-Based Legal Clause Analysis"
+type: "Group Research Project"
+university: "University of Liverpool"
+degree: "MSc Computer Science"
 
 overview:
+description: >
+This project investigates the use of Large Language Models (LLMs)
+for legal clause classification and analysis. The system evaluates
+multiple prompting strategies and model configurations to assess
+performance on a binary (Yes/No) legal classification task.
 
-&nbsp; description: >
+repository_structure:
+root: - data/ - models/ - scripts/ - experiments/ - results/ - README.yaml
+description:
+data: "Dataset files (TSV/CSV)"
+models: "Model-specific scripts or configurations"
+scripts: "Core execution scripts"
+experiments: "Experimental variations (prompts, decoding configs)"
+results: "Generated outputs and evaluation files"
 
-&nbsp;   This project evaluates a Large Language Model (LLM) on a binary
+models:
+baseline:
+name: "microsoft/Phi-3-mini-4k-instruct"
+parameters: "3B"
+framework: "HuggingFace Transformers"
+precision: "float16"
+device: "GPU (device_map=auto)"
+decoding:
+max_new_tokens: 5
+do_sample: false
 
-&nbsp;   legal clause classification task (Yes/No). The model is prompted
+datasets:
+primary_dataset:
+file_format: "TSV"
+required_columns: - text - answer_or_label
+label_mapping:
+yes: 1
+no: 0
+"1": 1
+"0": 0
 
-&nbsp;   as a legal expert and must respond strictly with "Yes" or "No".
+prompting_strategy:
+baseline_prompt: |
+You are a legal expert.
+Answer ONLY Yes or No.
 
-&nbsp; task\_type: "Binary Classification (Yes/No)"
+    Clause:
+    {clause}
 
-&nbsp; input\_format: "TSV file"
+    Answer:
 
-&nbsp; output\_format: "CSV file with predictions"
-
-
-
-model:
-
-&nbsp; name: "microsoft/Phi-3-mini-4k-instruct"
-
-&nbsp; provider: "Microsoft"
-
-&nbsp; parameters: "3B"
-
-&nbsp; framework: "HuggingFace Transformers"
-
-&nbsp; precision: "float16"
-
-&nbsp; device: "GPU (device\_map=auto)"
-
-&nbsp; generation:
-
-&nbsp;   max\_new\_tokens: 5
-
-&nbsp;   do\_sample: false
-
-&nbsp;   decoding: "Deterministic"
-
-
-
-dataset:
-
-&nbsp; file\_name: "test.tsv"
-
-&nbsp; required\_columns:
-
-&nbsp;   - text
-
-&nbsp;   - answer\_or\_label
-
-&nbsp; label\_mapping:
-
-&nbsp;   yes: 1
-
-&nbsp;   no: 0
-
-&nbsp;   "1": 1
-
-&nbsp;   "0": 0
-
-
-
-prompt:
-
-&nbsp; template: |
-
-&nbsp;   You are a legal expert.
-
-&nbsp;   Answer ONLY Yes or No.
-
-
-
-&nbsp;   Clause:
-
-&nbsp;   {clause}
-
-
-
-&nbsp;   Answer:
-
-
-
-pipeline:
-
-&nbsp; steps:
-
-&nbsp;   - Load dataset using pandas
-
-&nbsp;   - Map labels to binary (0/1)
-
-&nbsp;   - Load tokenizer and model
-
-&nbsp;   - Create text-generation pipeline
-
-&nbsp;   - Generate prediction for each clause
-
-&nbsp;   - Extract Yes/No from output
-
-&nbsp;   - Save predictions to CSV
-
-&nbsp;   - Compute evaluation metrics
-
-
+workflow:
+process: - Load dataset - Map labels to binary format - Load tokenizer and model - Generate predictions - Save outputs to CSV - Compute evaluation metrics
 
 evaluation:
-
-&nbsp; metrics:
-
-&nbsp;   - Accuracy
-
-&nbsp;   - F1 Score
-
-&nbsp; library: "scikit-learn"
-
-&nbsp; example\_results:
-
-&nbsp;   accuracy: 0.4875
-
-&nbsp;   f1\_score: 0.6555
-
-
+metrics: - Accuracy - F1 Score
+library: "scikit-learn"
+outputs: - results_gpu.csv - printed_accuracy - printed_f1_score
 
 installation:
-
-&nbsp; environment\_setup:
-
-&nbsp;   create\_venv: "python -m venv llm\_env"
-
-&nbsp;   activate\_windows: "llm\_env\\\\Scripts\\\\activate"
-
-&nbsp; dependencies:
-
-&nbsp;   - pandas
-
-&nbsp;   - torch
-
-&nbsp;   - transformers
-
-&nbsp;   - scikit-learn
-
-&nbsp;   - tqdm
-
-&nbsp; install\_command: "pip install -r requirements.txt"
-
-
+environment_setup:
+create_venv: "python -m venv llm_env"
+activate_windows: "llm_env\\Scripts\\activate"
+dependencies: - pandas - torch - transformers - scikit-learn - tqdm
+install_command: "pip install -r requirements.txt"
 
 execution:
+general_run_command: "python <script_name>.py"
+requirements: - Dataset must be present in data directory - GPU recommended for faster inference
 
-&nbsp; run\_command: "python your\_script\_name.py"
+branching_strategy:
+main: "Stable, reviewed code only"
+dev: "Integration branch for merging features"
+feature_branches: - feature/contract-classification - feature/data-preprocessing - feature/prompt-engineering - feature/model-comparison
 
-&nbsp; requirements:
-
-&nbsp;   - test.tsv must be in project directory
-
-&nbsp;   - GPU recommended
-
-
-
-outputs:
-
-&nbsp; generated\_files:
-
-&nbsp;   - results\_gpu.csv
-
-&nbsp; console\_output:
-
-&nbsp;   - Accuracy
-
-&nbsp;   - F1 Score
-
-
-
-future\_improvements:
-
-&nbsp; - Improve prompt engineering
-
-&nbsp; - Few-shot prompting
-
-&nbsp; - Structured output parsing
-
-&nbsp; - Larger model comparison
-
-
-
+reproducibility:
+requirements_file: "requirements.txt"
+recommended_python_version: "Python 3.11"
+hardware: "CUDA-enabled GPU recommended"
