@@ -1,81 +1,95 @@
-project:
-title: "MSc Group Project – LLM-Based Legal Clause Analysis"
-type: "Group Research Project"
-university: "University of Liverpool"
-degree: "MSc Computer Science"
+# MSc Group Project – LLM-Based Legal Clause Analysis
 
-overview:
-description: >
-This project investigates the use of Large Language Models (LLMs)
-for legal clause classification and analysis. The system evaluates
-multiple prompting strategies and model configurations to assess
-performance on a binary (Yes/No) legal classification task.
+## Overview
 
-repository_structure:
-root: - data/ - models/ - scripts/ - experiments/ - results/ - README.yaml
-description:
-data: "Dataset files (TSV/CSV)"
-models: "Model-specific scripts or configurations"
-scripts: "Core execution scripts"
-experiments: "Experimental variations (prompts, decoding configs)"
-results: "Generated outputs and evaluation files"
+This group project evaluates Large Language Models (LLMs) for binary legal clause classification (Yes/No).  
+Instruction-tuned models are used with prompt-based inference, and performance is measured using standard classification metrics.
 
-models:
-baseline:
-name: "microsoft/Phi-3-mini-4k-instruct"
-parameters: "3B"
-framework: "HuggingFace Transformers"
-precision: "float16"
-device: "GPU (device_map=auto)"
-decoding:
-max_new_tokens: 5
-do_sample: false
+---
 
-datasets:
-primary_dataset:
-file_format: "TSV"
-required_columns: - text - answer_or_label
-label_mapping:
-yes: 1
-no: 0
-"1": 1
-"0": 0
+## Objectives
 
-prompting_strategy:
-baseline_prompt: |
+- Evaluate instruction-tuned LLMs for legal clause classification  
+- Compare prompting strategies  
+- Analyse performance using Accuracy and F1 Score  
+- Maintain reproducible experimentation  
+
+---
+
+## Baseline Model
+
+- **Model:** `microsoft/Phi-3-mini-4k-instruct` (3B parameters)  
+- **Framework:** HuggingFace Transformers  
+- **Precision:** float16  
+- **Decoding:**  
+  - `max_new_tokens = 5`  
+  - `do_sample = False`  
+
+---
+
+## Dataset
+
+Input file: `test.tsv`
+
+Required columns:
+- `text` (legal clause)  
+- `answer` or `label` (Yes/No or 1/0)  
+
+Labels are mapped to binary (Yes = 1, No = 0).
+
+---
+
+## Prompt Template
+
+```
 You are a legal expert.
 Answer ONLY Yes or No.
 
-    Clause:
-    {clause}
+Clause:
+{clause}
 
-    Answer:
+Answer:
+```
 
-workflow:
-process: - Load dataset - Map labels to binary format - Load tokenizer and model - Generate predictions - Save outputs to CSV - Compute evaluation metrics
+---
 
-evaluation:
-metrics: - Accuracy - F1 Score
-library: "scikit-learn"
-outputs: - results_gpu.csv - printed_accuracy - printed_f1_score
+## How to Run
 
-installation:
-environment_setup:
-create_venv: "python -m venv llm_env"
-activate_windows: "llm_env\\Scripts\\activate"
-dependencies: - pandas - torch - transformers - scikit-learn - tqdm
-install_command: "pip install -r requirements.txt"
+```bash
+python -m venv llm_env
+llm_env\Scripts\activate
+pip install -r requirements.txt
+python <script_name>.py
+```
 
-execution:
-general_run_command: "python <script_name>.py"
-requirements: - Dataset must be present in data directory - GPU recommended for faster inference
+Output:
+- `results_gpu.csv`
+- Accuracy
+- F1 Score
 
-branching_strategy:
-main: "Stable, reviewed code only"
-dev: "Integration branch for merging features"
-feature_branches: - feature/contract-classification - feature/data-preprocessing - feature/prompt-engineering - feature/model-comparison
+---
 
-reproducibility:
-requirements_file: "requirements.txt"
-recommended_python_version: "Python 3.11"
-hardware: "CUDA-enabled GPU recommended"
+## Repository Structure
+
+```
+data/        # Dataset files
+scripts/     # Core scripts
+experiments/ # Prompt/model variations
+results/     # Generated outputs
+```
+
+---
+
+## Branching Strategy
+
+- `main` – Stable, reviewed code  
+- `feature/*` – Individual task branches  
+
+All feature work is merged via Pull Requests.
+
+---
+
+## Academic Context
+
+MSc Computer Science – University of Liverpool  
+Group project focused on applied evaluation of LLMs for legal NLP tasks.
