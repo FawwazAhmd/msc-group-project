@@ -8,10 +8,10 @@ from tqdm import tqdm
 # CONFIGURATION
 # =====================================
 
-DATASET_PATH = "test.tsv"
-OUTPUT_PATH = "results_gpu.csv"
+DATASET_PATH = "contract_qa_test.tsv"
+OUTPUT_PATH = "contract_qa_cpu_results.csv"
 
-# Small but capable instruction model (3B parameters)
+# Small instruction model (3B parameters)
 MODEL_NAME = "microsoft/Phi-3-mini-4k-instruct"
 
 # =====================================
@@ -45,15 +45,18 @@ tokenizer = AutoTokenizer.from_pretrained(MODEL_NAME)
 
 model = AutoModelForCausalLM.from_pretrained(
     MODEL_NAME,
-    device_map="auto",
-  torch_dtype=torch.float16
+    device_map="cpu",
+    torch_dtype=torch.float32
 )
+
 
 pipe = pipeline(
     "text-generation",
     model=model,
-    tokenizer=tokenizer
+    tokenizer=tokenizer,
+    device=-1
 )
+
 
 print("Model loaded successfully.")
 
