@@ -131,7 +131,7 @@ accuracy = accuracy_score(df[LABEL_COLUMN], df["prediction"])
 f1 = f1_score(df[LABEL_COLUMN], df["prediction"])
 precision = precision_score(df[LABEL_COLUMN], df["prediction"])
 recall = recall_score(df[LABEL_COLUMN], df["prediction"])
-cm = confusion_matrix(df[LABEL_COLUMN], df["phi3"])
+cm = confusion_matrix(df[LABEL_COLUMN], df["prediction"])
 
 print("\nEvaluation Results:")
 print("Accuracy:", round(accuracy, 4))
