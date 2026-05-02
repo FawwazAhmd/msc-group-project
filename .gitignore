@@ -1,0 +1,5 @@
+llm_env/
+__pycache__/
+*.pyc
+.env
+results_gpu.csv
